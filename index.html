@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Aadhar Family Info - Educational Purpose Only</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;min-height:100vh;background:linear-gradient(135deg,#0c0c1d,#1a1a3e,#0d0d2b);color:#fff;display:flex;justify-content:center;align-items:center;padding:20px;overflow-x:hidden}
+.container{max-width:550px;width:100%}
+.card{background:rgba(20,20,50,0.8);backdrop-filter:blur(30px);border-radius:25px;padding:30px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 25px 50px rgba(0,0,0,0.5)}
+
+/* ========== INTRO ANIMATION OVERLAY ========== */
+.intro-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;justify-content:center;align-items:flex-start;overflow:hidden}
+.falling-letters{position:relative;width:100%;height:100%;display:flex;justify-content:center;gap:15px;flex-wrap:wrap;padding-top:0}
+.falling-letter{font-size:80px;font-weight:900;position:relative;animation:fallDown 1.2s ease-in forwards;opacity:0;text-shadow:0 0 20px currentColor,0 0 40px currentColor,0 0 80px currentColor,0 0 120px currentColor;font-family:'Arial Black',Impact,sans-serif}
+.falling-letter:nth-child(1){animation-delay:0.1s;color:#ff0000}
+.falling-letter:nth-child(2){animation-delay:0.3s;color:#ff6b00}
+.falling-letter:nth-child(3){animation-delay:0.5s;color:#ffdd00}
+.falling-letter:nth-child(4){animation-delay:0.7s;color:#00ff00}
+.falling-letter:nth-child(5){animation-delay:0.9s;color:#00aaff}
+.falling-letter:nth-child(6){animation-delay:1.1s;color:#8800ff}
+.letter-s{color:#ff0000}.letter-a{color:#ff6b00}.letter-t{color:#ffdd00}.letter-v{color:#00ff00}.letter-i{color:#00aaff}.letter-r{color:#8800ff}
+
+@keyframes fallDown{
+    0%{transform:translateY(-800px) rotate(0deg);opacity:0}
+    10%{opacity:1}
+    60%{transform:translateY(calc(50vh - 100px)) rotate(360deg);opacity:1}
+    70%{transform:translateY(calc(50vh - 60px)) rotate(360deg)}
+    80%{transform:translateY(calc(50vh - 100px)) rotate(360deg)}
+    90%{transform:translateY(calc(50vh - 85px)) rotate(360deg)}
+    100%{transform:translateY(calc(50vh - 90px)) rotate(360deg);opacity:1}
+}
+
+.letter-landed{animation:none;transform:translateY(calc(50vh - 90px));opacity:1}
+
+.intro-text{position:absolute;bottom:80px;width:100%;text-align:center;animation:fadeInText 1s ease 2s forwards;opacity:0}
+.intro-text .created{font-size:14px;opacity:0.7;letter-spacing:3px}
+.intro-text .name{font-size:28px;font-weight:900;background:linear-gradient(135deg,#ff0000,#ff6b00,#ffdd00,#00ff00,#00aaff,#8800ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:5px}
+.intro-text .dots{margin-top:15px}
+.intro-text .dots span{display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin:0 4px;animation:dotPulse 0.6s infinite}
+.intro-text .dots span:nth-child(2){animation-delay:0.2s}
+.intro-text .dots span:nth-child(3){animation-delay:0.4s}
+
+@keyframes fadeInText{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dotPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+.sparkles{position:absolute;width:100%;height:100%;pointer-events:none}
+.sparkle{position:absolute;width:6px;height:6px;background:#fff;border-radius:50%;animation:sparkleAnim 1s ease-out forwards;opacity:0}
+@keyframes sparkleAnim{
+    0%{transform:scale(0);opacity:1}
+    100%{transform:scale(3);opacity:0}
+}
+
+.header{text-align:center;margin-bottom:25px}
+.header .icon{font-size:60px;margin-bottom:10px}
+.header h1{font-size:24px;margin-bottom:5px;background:linear-gradient(135deg,#ff6b6b,#ffa502);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header p{font-size:12px;opacity:0.6}
+.warning-box{background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);border-radius:15px;padding:12px 15px;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-size:11px}
+.warning-box .warn-icon{font-size:24px}
+input{width:100%;padding:16px 20px;border:2px solid rgba(255,255,255,0.2);border-radius:50px;background:rgba(255,255,255,0.05);color:#fff;font-size:18px;outline:none;transition:all 0.3s;letter-spacing:2px;text-align:center}
+input:focus{border-color:#ff6b6b;box-shadow:0 0 20px rgba(255,107,107,0.3)}
+input::placeholder{color:rgba(255,255,255,0.3);letter-spacing:0}
+button{width:100%;padding:16px;margin-top:15px;border:none;border-radius:50px;font-size:18px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#ff6b6b,#ff4757);color:#fff;transition:all 0.3s}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,107,107,0.4)}
+button:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.result-section{margin-top:20px;display:none;animation:fadeIn 0.5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.family-count{text-align:center;font-size:20px;font-weight:700;margin-bottom:15px;color:#ffa502}
+.family-count span{font-size:32px;color:#ff6b6b}
+.member-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;margin-bottom:15px;position:relative;transition:all 0.3s}
+.member-card:hover{border-color:rgba(255,107,107,0.3);background:rgba(255,107,107,0.05)}
+.member-number{position:absolute;top:10px;right:15px;background:rgba(255,107,107,0.2);color:#ff6b6b;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.member-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px}
+.member-label{opacity:0.7;font-weight:600;min-width:110px;color:#a8d1ff}
+.member-value{font-weight:700;text-align:right;word-break:break-all;color:#fff}
+.member-name{font-size:20px;font-weight:700;margin-bottom:10px;color:#a8ff78}
+.member-aadhar{font-size:13px;opacity:0.8;margin-bottom:15px;letter-spacing:1px;font-family:monospace}
+.loading{display:flex;justify-content:center;align-items:center;gap:10px;padding:30px;font-size:16px}
+.spinner{width:30px;height:30px;border:3px solid rgba(255,255,255,0.2);border-top-color:#ff6b6b;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-msg{color:#ff6b6b;text-align:center;padding:15px;font-size:14px}
+.footer{text-align:center;margin-top:20px;font-size:11px;opacity:0.4}
+.api-status{text-align:center;font-size:11px;margin-top:10px;opacity:0.5}
+.raw-toggle{margin-top:20px;text-align:center}
+.raw-toggle button{background:rgba(255,255,255,0.1);font-size:12px;padding:8px 20px;width:auto}
+.raw-json{display:none;margin-top:10px;background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;font-size:10px;overflow-x:auto;max-height:250px;overflow-y:auto}
+.raw-json.show{display:block}
+.raw-json pre{color:#a8ff78;white-space:pre-wrap;word-break:break-all}
+.head-member-badge{display:inline-block;background:#ffa502;color:#000;padding:3px 10px;border-radius:15px;font-size:11px;font-weight:700;margin-left:8px}
+.try-again-btn{background:rgba(255,255,255,0.1)!important;margin-top:8px!important;font-size:14px!important;padding:10px!important}
+</style>
+</head>
+<body>
+
+<!-- ========== INTRO ANIMATION ========== -->
+<div class="intro-overlay" id="introOverlay">
+    <div class="sparkles" id="sparklesContainer"></div>
+    <div class="falling-letters" id="fallingLetters">
+        <span class="falling-letter letter-s">S</span>
+        <span class="falling-letter letter-a">A</span>
+        <span class="falling-letter letter-t">T</span>
+        <span class="falling-letter letter-v">V</span>
+        <span class="falling-letter letter-i">I</span>
+        <span class="falling-letter letter-r">R</span>
+    </div>
+    <div class="intro-text" id="introText">
+        <div class="created">CREATED BY</div>
+        <div class="name">SATVIR</div>
+        <div class="dots">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="container" id="mainContent" style="display:none;">
+    <div class="card">
+        <div class="header">
+            <div class="icon">👨‍👩‍👧‍👦</div>
+            <h1>Aadhar Family Info</h1>
+            <p>Educational Purpose Only - Family Members Lookup</p>
+        </div>
+        
+        <div class="warning-box">
+            <span class="warn-icon">⚠️</span>
+            <span>This tool is for <strong>educational purposes only</strong>. Do NOT use for real Aadhar numbers. Misuse is illegal under Indian law.</span>
+        </div>
+        
+        <input type="text" id="aadharInput" placeholder="Enter 12-Digit Aadhar Number" maxlength="12" autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        <button onclick="searchAadhar()" id="searchBtn">🔍 Search Family Members</button>
+        
+        <div class="result-section" id="resultSection">
+            <div class="family-count" id="familyCount"></div>
+            <div id="membersList"></div>
+            <div class="raw-toggle">
+                <button onclick="toggleRaw()">📄 View Raw API Response</button>
+            </div>
+            <div class="raw-json" id="rawJson"></div>
+        </div>
+        
+        <div class="api-status">🔗 API: <span id="apiStatus">Checking...</span></div>
+    </div>
+    <div class="footer">🏛️ Government of India | Educational Demo Only</div>
+</div>
+
+<script>
+// ========== INTRO ANIMATION ==========
+function createSparkles() {
+    const container = document.getElementById('sparklesContainer');
+    setInterval(() => {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+        sparkle.style.width = (Math.random() * 8 + 4) + 'px';
+        sparkle.style.height = sparkle.style.width;
+        const colors = ['#ff0000','#ff6b00','#ffdd00','#00ff00','#00aaff','#8800ff','#ff00ff','#00ffff'];
+        sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        sparkle.style.boxShadow = '0 0 10px ' + sparkle.style.background;
+        container.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1000);
+    }, 100);
+}
+
+function startIntro() {
+    createSparkles();
+    
+    // Total animation time: 1.2s (fall) + 1.1s (last delay) + 2s (fade in text) = ~3.5s
+    // Wait 4.5 seconds then hide intro
+    setTimeout(() => {
+        const overlay = document.getElementById('introOverlay');
+        overlay.style.transition = 'opacity 0.8s ease';
+        overlay.style.opacity = '0';
+        
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+        }, 800);
+    }, 4500);
+}
+
+// ========== API CONFIG ==========
+const CORS_PROXIES = [
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?',
+    'https://cors-anywhere.herokuapp.com/'
+];
+
+const API_URL = "https://pentestgpt-impds-api-finalapi.onrender.com/search-aadhaar?search=A&aadhaar=";
+let lastRawData = null;
+let apiOnline = false;
+
+async function checkAPIStatus() {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+        const res = await fetch(API_URL + "000000000000", { signal: controller.signal });
+        clearTimeout(timeout);
+        apiOnline = true;
+        document.getElementById('apiStatus').innerHTML = '<span style="color:#2ed573;">✅ Online</span>';
+    } catch(e) {
+        apiOnline = false;
+        document.getElementById('apiStatus').innerHTML = '<span style="color:#ff6b6b;">❌ Offline - Using CORS Proxy</span>';
+    }
+}
+
+function toggleRaw() { document.getElementById('rawJson').classList.toggle('show'); }
+
+function deepSearch(obj, searchKey, depth) {
+    if (!obj || typeof obj !== 'object' || depth > 30) return null;
+    if (!depth) depth = 0;
+    if (obj[searchKey] !== undefined && obj[searchKey] !== null && obj[searchKey] !== '') return obj[searchKey];
+    for (let key in obj) {
+        if (key.toLowerCase() === searchKey.toLowerCase() && obj[key] !== undefined && obj[key] !== null && obj[key] !== '') return obj[key];
+    }
+    for (let key in obj) {
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+            let result = deepSearch(obj[key], searchKey, depth + 1);
+            if (result !== null && result !== undefined) return result;
+        }
+        if (Array.isArray(obj[key])) {
+            for (let item of obj[key]) {
+                if (typeof item === 'object' && item !== null) {
+                    let result = deepSearch(item, searchKey, depth + 1);
+                    if (result !== null && result !== undefined) return result;
+                }
+            }
+        }
+    }
+    return null;
+}
+
+function extractMembers(data) {
+    let members = [];
+    function findMemberArrays(obj, depth) {
+        if (!obj || typeof obj !== 'object' || depth > 20) return [];
+        let arrays = [];
+        for (let key in obj) {
+            if (Array.isArray(obj[key]) && obj[key].length > 0 && typeof obj[key][0] === 'object') arrays.push({ key: key, data: obj[key] });
+            if (typeof obj[key] === 'object' && obj[key] !== null) arrays = arrays.concat(findMemberArrays(obj[key], depth + 1));
+        }
+        return arrays;
+    }
+    let allArrays = findMemberArrays(data, 0);
+    for (let arr of allArrays) {
+        for (let item of arr.data) {
+            if (typeof item === 'object') {
+                let name = deepSearch(item, 'name', 0) || deepSearch(item, 'Name', 0);
+                let aadhar = deepSearch(item, 'aadhaar', 0) || deepSearch(item, 'aadhar', 0) || deepSearch(item, 'Aadhaar', 0) || deepSearch(item, 'uid', 0);
+                if (name || aadhar) {
+                    members.push({
+                        name: name || 'N/A', aadhar: aadhar || 'N/A',
+                        dob: deepSearch(item, 'dob', 0) || 'N/A', gender: deepSearch(item, 'gender', 0) || 'N/A',
+                        relation: deepSearch(item, 'relation', 0) || 'N/A', phone: deepSearch(item, 'phone', 0) || 'N/A',
+                        age: deepSearch(item, 'age', 0) || 'N/A', state: deepSearch(item, 'state', 0) || 'N/A',
+                        district: deepSearch(item, 'district', 0) || 'N/A', email: deepSearch(item, 'email', 0) || 'N/A', raw: item
+                    });
+                }
+            }
+        }
+        if (members.length > 0) break;
+    }
+    return members;
+}
+
+async function fetchWithRetry(url, retries = 3) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+            const response = await fetch(url, { signal: controller.signal, headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0' } });
+            clearTimeout(timeout);
+            if (response.ok) return response;
+        } catch (e) {}
+    }
+    for (let proxy of CORS_PROXIES) {
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 15000);
+            const response = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
+            clearTimeout(timeout);
+            if (response.ok) return response;
+        } catch (e) {}
+    }
+    throw new Error('All connection methods failed.');
+}
+
+async function searchAadhar() {
+    const aadhar = document.getElementById('aadharInput').value.trim();
+    const btn = document.getElementById('searchBtn');
+    const resultSection = document.getElementById('resultSection');
+    const membersList = document.getElementById('membersList');
+    const familyCount = document.getElementById('familyCount');
+    const rawJson = document.getElementById('rawJson');
+    
+    rawJson.classList.remove('show'); rawJson.innerHTML = ''; resultSection.style.display = 'none';
+    
+    if (!aadhar) { resultSection.style.display = 'block'; membersList.innerHTML = '<p class="error-msg">❌ Please enter an Aadhar number</p>'; return; }
+    if (aadhar.length !== 12) { resultSection.style.display = 'block'; membersList.innerHTML = '<p class="error-msg">❌ Aadhar number must be 12 digits</p>'; return; }
+    
+    btn.disabled = true; btn.textContent = '⏳ Connecting...';
+    resultSection.style.display = 'block';
+    membersList.innerHTML = '<div class="loading"><div class="spinner"></div><span>Fetching family data...</span></div>';
+    
+    try {
+        const response = await fetchWithRetry(API_URL + aadhar);
+        const data = await response.json();
+        lastRawData = data;
+        rawJson.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        const members = extractMembers(data);
+        
+        if (members.length === 0) {
+            membersList.innerHTML = '<p style="text-align:center;color:#ffa502;">⚠️ No structured family data found.</p><p style="text-align:center;font-size:11px;opacity:0.6;">Click "View Raw API Response" to see full data.</p><button class="try-again-btn" onclick="toggleRaw()">📄 Show Raw Response</button>';
+        } else {
+            familyCount.innerHTML = '👨‍👩‍👧‍👦 Total Family Members: <span>' + members.length + '</span>';
+            let html = '';
+            members.forEach((member, index) => {
+                html += `<div class="member-card"><div class="member-number">Member #${index + 1}</div>
+                <div class="member-name">👤 ${member.name} ${index === 0 ? '<span class="head-member-badge">HEAD</span>' : ''}</div>
+                <div class="member-aadhar">🆔 ${member.aadhar}</div>
+                ${member.relation !== 'N/A' ? `<div class="member-row"><span class="member-label">🔗 Relation</span><span class="member-value">${member.relation}</span></div>` : ''}
+                ${member.dob !== 'N/A' ? `<div class="member-row"><span class="member-label">🎂 DOB</span><span class="member-value">${member.dob}</span></div>` : ''}
+                ${member.age !== 'N/A' ? `<div class="member-row"><span class="member-label">📅 Age</span><span class="member-value">${member.age}</span></div>` : ''}
+                ${member.gender !== 'N/A' ? `<div class="member-row"><span class="member-label">⚥ Gender</span><span class="member-value">${member.gender}</span></div>` : ''}
+                ${member.phone !== 'N/A' ? `<div class="member-row"><span class="member-label">📞 Phone</span><span class="member-value">${member.phone}</span></div>` : ''}
+                ${member.email !== 'N/A' ? `<div class="member-row"><span class="member-label">📧 Email</span><span class="member-value">${member.email}</span></div>` : ''}
+                ${member.state !== 'N/A' ? `<div class="member-row"><span class="member-label">🗺️ State</span><span class="member-value">${member.state}</span></div>` : ''}
+                ${member.district !== 'N/A' ? `<div class="member-row"><span class="member-label">🏙️ District</span><span class="member-value">${member.district}</span></div>` : ''}
+                </div>`;
+            });
+            membersList.innerHTML = html;
+        }
+    } catch (error) {
+        membersList.innerHTML = `<p class="error-msg">❌ Connection Failed</p><p style="text-align:center;font-size:13px;">${error.message}</p><button class="try-again-btn" onclick="searchAadhar()">🔄 Try Again</button>`;
+    } finally {
+        btn.disabled = false; btn.textContent = '🔍 Search Family Members';
+    }
+}
+
+document.getElementById('aadharInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') searchAadhar(); });
+
+// ========== INIT ==========
+window.addEventListener('load', () => {
+    startIntro();
+    checkAPIStatus();
+});
+</script>
+</body>
+</html>
